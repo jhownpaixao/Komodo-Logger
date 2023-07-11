@@ -3,7 +3,7 @@
   "description": "A simple logger for php",
   "type": "library",
   "license": "MIT",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "require": {
     "php": ">=7.1.3"
   },
