@@ -2,6 +2,9 @@
 
 namespace Komodo\Logger;
 
+use Komodo\Logger\Transports\HTMLTransport;
+use Komodo\Logger\Transports\Transport;
+
 /*******************************************************************************************
  Komodo Lib - Logger
  ____________________________________________________________________________________________
@@ -18,51 +21,71 @@ namespace Komodo\Logger;
 class Logger
 {
     private $name;
-    private $especial;
-    public static function BreackAndLog($data)
-    {
-        echo "<pre>";
-        var_dump($data);
-        echo "</pre>";
-        die();
-    }
+    /**
+     * @var Transport
+     */
+    private $transport;
 
-    public static function BreackAndLogAPI($log, $msg = 'Houve uma falha na requisição')
+    /**
+     * @param Transport|null $transport
+     */
+    public function __construct($transport = null)
     {
-        echo json_encode([
-            'error' => true,
-            'error_msg' => $msg
-
-        ]);
-        die();
-    }
-
-    public static function error($data, $msg = null)
-    {
-    }
-
-    public static function info($data, $msg = null)
-    {
-    }
-
-    public static function warn($data, $msg = null)
-    {
-    }
-
-    public static function trace($data, $msg = null)
-    {
-    }
-
-    public static function all($data, $msg = null)
-    {
-    }
-
-    public static function debug($data, $msg = null)
-    {
+        $this->transport = $transport ?: new HTMLTransport('pre');
     }
 
     public function register($name)
     {
         $this->name = $name;
+    }
+
+    private function log($data, $msg, $level)
+    {
+        $bt = debug_backtrace();
+
+        $this->transport->log([
+            'name' => $this->name ?: 'ANONYMOUS',
+            'msg' => $msg,
+            'oringi' => basename($bt[1]['file']),
+            'content' => $data,
+            'level' => $level,
+            'timestamp' => date('H:i:s')
+        ]);
+    }
+
+    public function logAndBreack($data, $msg = null)
+    {
+        $this->log($data, $msg, "FORCED");
+        die();
+    }
+
+    public function error($data, $msg = null)
+    {
+        $this->log($data, $msg, "ERROR");
+    }
+
+    public function info($data, $msg = null)
+    {
+        $this->log($data, $msg, "INFO");
+    }
+
+    public function warn($data, $msg = null)
+    {
+        $this->log($data, $msg, "WARN");
+    }
+
+    public function trace($data, $msg = null)
+    {
+        $this->log($data, $msg, "TRACE");
+    }
+
+    public function all($data, $msg = null)
+    {
+        $this->log($data, $msg, "ERROR");
+    }
+
+    public function debug($data, $msg = null)
+    {
+        $this->log($data, $msg, "DEBUG");
     }
 }
