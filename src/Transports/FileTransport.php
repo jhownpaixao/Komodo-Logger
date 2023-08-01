@@ -1,10 +1,8 @@
 <?php
 
-namespace Komodo\Logger\Transports;
-
 /*******************************************************************************************
-  Komodo Lib - Logger
- ____________________________________________________________________________________________
+Komodo Lib - Logger
+____________________________________________________________________________________________
  *
  * Desenvolvido por: Jhonnata Paixão (Líder de Projeto)
  * Iniciado em: 15/10/2022
@@ -14,13 +12,19 @@ namespace Komodo\Logger\Transports;
  *
  *********************************************************************************************/
 
+namespace Komodo\Logger\Transports;
+
+/**
+ * [Description FileTransport]
+ */
 class FileTransport implements Transport
 {
     /**
+     * asasdasd
+     *
      * @var string
      */
     private $file;
-
 
     /**
      * @var string
@@ -34,17 +38,17 @@ class FileTransport implements Transport
 
     /**
      * @param array $data
-     * 
-     * @return void
+     *
+     * @return string
      */
     public function log($data)
     {
-        $name = $data['name'];
-        $msg = $data['msg'];
-        $oringi = $data['oringi'];
-        $content = '| ' . print_r($data['content'], true);
-        $level = $data['level'];
-        $timestamp = $data['timestamp'];
+        $name = $data[ 'name' ];
+        $msg = $data[ 'msg' ];
+        $oringi = $data[ 'oringi' ];
+        $content = '| ' . print_r($data[ 'content' ], true);
+        $level = $data[ 'level' ];
+        $timestamp = $data[ 'timestamp' ];
 
         $log = "[$level][$name][$oringi][$timestamp]:: $msg $content" . PHP_EOL;
         $file = $this->prepare($level);
@@ -53,17 +57,25 @@ class FileTransport implements Transport
         /* process ALL*/
         $file = $this->prepare('ALL');
         file_put_contents($file, $log, FILE_APPEND);
+        return $log;
     }
 
+    /**
+     * @param mixed $level
+     *
+     * @return [type]
+     */
     private function prepare($level)
     {
         $level = strtolower($level);
-        $absolute =  $this->path . '/' . $level . '.log';
-        if (!is_dir($this->path)) mkdir($this->path, 0777, true);
+        $absolute = $this->path . '/' . $level . '.log';
+        if (!is_dir($this->path)) {
+            mkdir($this->path, 0777, true);
+        }
 
         if (!file_exists($absolute)) {
             fopen($absolute, 'w');
-           /*  return !!file_put_contents($absolute, ''); */
+            /*  return !!file_put_contents($absolute, ''); */
         }
 
         return $absolute;

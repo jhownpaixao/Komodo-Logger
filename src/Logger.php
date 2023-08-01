@@ -6,8 +6,8 @@ use Komodo\Logger\Transports\HTMLTransport;
 use Komodo\Logger\Transports\Transport;
 
 /*******************************************************************************************
- Komodo Lib - Logger
- ____________________________________________________________________________________________
+Komodo Lib - Logger
+____________________________________________________________________________________________
  *
  * Desenvolvido por: Jhonnata Paixão (Líder de Projeto)
  * Iniciado em: 15/10/2022
@@ -17,7 +17,6 @@ use Komodo\Logger\Transports\Transport;
  *
  *********************************************************************************************/
 
-
 class Logger
 {
     private $name;
@@ -25,6 +24,16 @@ class Logger
      * @var Transport
      */
     private $transport;
+
+    /**
+     * @var string
+     */
+    private $lastLogMsg;
+
+    /**
+     * @var array
+     */
+    private $lastLogFull;
 
     /**
      * @param Transport|null $transport
@@ -42,15 +51,18 @@ class Logger
     private function log($data, $msg, $level)
     {
         $bt = debug_backtrace();
-
-        $this->transport->log([
+        $log = [
             'name' => $this->name ?: 'ANONYMOUS',
             'msg' => $msg,
-            'oringi' => basename($bt[1]['file']),
+            'oringi' => basename($bt[ 1 ][ 'file' ]),
             'content' => $data,
             'level' => $level,
-            'timestamp' => date('H:i:s')
-        ]);
+            'timestamp' => date('H:i:s'),
+         ];
+
+        $msg = $this->transport->log($log);
+        $this->lastLogFull = $log;
+        $this->lastLogMsg = $msg;
     }
 
     public function logAndBreack($data, $msg = null)
@@ -87,5 +99,18 @@ class Logger
     public function debug($data, $msg = null)
     {
         $this->log($data, $msg, "DEBUG");
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastMessage()
+    {
+        return $this->lastLogMsg;
+    }
+
+    public function getLastLog()
+    {
+        return $this->lastLogMsg;
     }
 }
