@@ -60,7 +60,7 @@ class Logger
             date('H:i:s')
         );
         $msg = $this->transport->log($logData);
-        $this->lastLogFull = $data;
+        $this->lastLogFull = $logData;
         $this->lastLogMsg = $msg;
     }
 
