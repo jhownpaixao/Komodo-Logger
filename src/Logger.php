@@ -2,9 +2,6 @@
 
 namespace Komodo\Logger;
 
-use Komodo\Logger\Transports\HTMLTransport;
-use Komodo\Logger\Transports\Transport;
-
 /*******************************************************************************************
 Komodo Lib - Logger
 ____________________________________________________________________________________________
@@ -16,6 +13,9 @@ ________________________________________________________________________________
  * Copyright (c) 2023
  *
  *********************************************************************************************/
+use Komodo\Logger\LogData;
+use Komodo\Logger\Transports\HTMLTransport;
+use Komodo\Logger\Transports\Transport;
 
 class Logger
 {
@@ -31,7 +31,7 @@ class Logger
     private $lastLogMsg;
 
     /**
-     * @var array
+     * @var LogData
      */
     private $lastLogFull;
 
@@ -51,17 +51,16 @@ class Logger
     private function log($data, $msg, $level)
     {
         $bt = debug_backtrace();
-        $log = [
-            'name' => $this->name ?: 'ANONYMOUS',
-            'msg' => $msg,
-            'oringi' => basename($bt[ 1 ][ 'file' ]),
-            'content' => $data,
-            'level' => $level,
-            'timestamp' => date('H:i:s'),
-         ];
-
-        $msg = $this->transport->log($log);
-        $this->lastLogFull = $log;
+        $logData = new LogData(
+            $this->name ?: 'ANONYMOUS',
+            $msg,
+            basename($bt[ 1 ][ 'file' ]),
+            $data,
+            $level,
+            date('H:i:s')
+        );
+        $msg = $this->transport->log($logData);
+        $this->lastLogFull = $data;
         $this->lastLogMsg = $msg;
     }
 
@@ -109,8 +108,11 @@ class Logger
         return $this->lastLogMsg;
     }
 
+    /**
+     * @return LogData
+     */
     public function getLastLog()
     {
-        return $this->lastLogMsg;
+        return $this->lastLogFull;
     }
 }

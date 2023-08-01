@@ -2,6 +2,8 @@
 
 namespace Komodo\Logger\Transports;
 
+use Komodo\Logger\LogData;
+
 /*
 |-----------------------------------------------------------------------------
 | Komodo Logger
@@ -29,18 +31,18 @@ class HTMLTransport implements Transport
     }
 
     /**
-     * @param array $data
+     * @param LogData $data
      *
      * @return string
      */
     public function log($data)
     {
-        $name = $data[ 'name' ];
-        $msg = $data[ 'msg' ];
-        $oringi = $data[ 'oringi' ];
-        $content = '| ' . print_r($data[ 'content' ], true);
-        $level = $data[ 'level' ];
-        $timestamp = $data[ 'timestamp' ];
+        $name = $data->name;
+        $msg = $data->msg;
+        $oringi = $data->oringin;
+        $content = '| ' . print_r($data->content, true);
+        $level = $data->level;
+        $timestamp = $data->timestamp;
 
         $log = "[$level][$oringi][$name][$timestamp]:: $msg $content";
         $msg = "<{$this->tag}>$log</{$this->tag}>";

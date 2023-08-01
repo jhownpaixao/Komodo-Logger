@@ -14,6 +14,8 @@ ________________________________________________________________________________
 
 namespace Komodo\Logger\Transports;
 
+use Komodo\Logger\LogData;
+
 /**
  * [Description FileTransport]
  */
@@ -37,18 +39,18 @@ class FileTransport implements Transport
     }
 
     /**
-     * @param array $data
+     * @param LogData $data
      *
      * @return string
      */
     public function log($data)
     {
-        $name = $data[ 'name' ];
-        $msg = $data[ 'msg' ];
-        $oringi = $data[ 'oringi' ];
-        $content = '| ' . print_r($data[ 'content' ], true);
-        $level = $data[ 'level' ];
-        $timestamp = $data[ 'timestamp' ];
+        $name = $data->name;
+        $msg = $data->msg;
+        $oringi = $data->oringin;
+        $content = '| ' . print_r($data->content, true);
+        $level = $data->level;
+        $timestamp = $data->timestamp;
 
         $log = "[$level][$name][$oringi][$timestamp]:: $msg $content" . PHP_EOL;
         $file = $this->prepare($level);

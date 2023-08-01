@@ -2,6 +2,8 @@
 
 namespace Komodo\Logger\Transports;
 
+use Komodo\Logger\LogData;
+
 /*
 |-----------------------------------------------------------------------------
 | Komodo Logger
@@ -20,7 +22,7 @@ interface Transport
 {
 
     /**
-     * @param array $data
+     * @param LogData $data
      *
      * @return string
      */
