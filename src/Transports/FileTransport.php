@@ -48,7 +48,7 @@ class FileTransport implements Transport
         $name = $data->name;
         $msg = $data->msg;
         $oringi = $data->oringin;
-        $content = '| ' . print_r($data->content, true);
+        $content = '| ' . json_encode($data->content);
         $level = $data->level;
         $timestamp = $data->timestamp;
 

@@ -40,7 +40,7 @@ class HTMLTransport implements Transport
         $name = $data->name;
         $msg = $data->msg;
         $oringi = $data->oringin;
-        $content = '| ' . print_r($data->content, true);
+        $content = '| ' . json_encode($data->content, true);
         $level = $data->level;
         $timestamp = $data->timestamp;
 

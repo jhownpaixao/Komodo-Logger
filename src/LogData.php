@@ -21,6 +21,12 @@ class LogData
     public $name;
     public $msg;
     public $oringin;
+    
+    /**
+     * $content
+     *
+     * @var mixed
+     */
     public $content;
     public $level;
     public $timestamp;
